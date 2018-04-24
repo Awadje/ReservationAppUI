@@ -31,7 +31,11 @@
             </v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
+<<<<<<< HEAD
               <v-btn icon @click="$router.push({ name: 'Reservation'})">
+=======
+              <v-btn icon>
+>>>>>>> 9cbe49c... Add calemdar icon
                 <v-icon>event_note</v-icon>
               </v-btn>
               <v-btn icon>
