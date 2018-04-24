@@ -29,7 +29,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn icon>
-                <v-icon>favorite</v-icon>
+                <v-icon>event_note</v-icon>
               </v-btn>
               <v-btn icon>
                 <v-icon>bookmark</v-icon>
