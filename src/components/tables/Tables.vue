@@ -1,5 +1,8 @@
 <template>
  <v-container fluid grid-list-md>
+      <v-btn @click="$router.push({ name: 'HelloWorld'})" fab dark small color="primary">
+      <v-icon dark>keyboard_arrow_left</v-icon>
+    </v-btn>
       <v-layout row wrap>
         <v-flex
           v-bind="{ [`xs${table.flex}`]: true }"
@@ -28,7 +31,7 @@
             </v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn icon>
+              <v-btn icon @click="$router.push({ name: 'Reservation'})">
                 <v-icon>event_note</v-icon>
               </v-btn>
               <v-btn icon>
