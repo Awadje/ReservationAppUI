@@ -70,6 +70,8 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   data () {
     return {
@@ -86,6 +88,21 @@ export default {
       title: 'Vuetify.js'
     }
   },
-  name: 'App'
+  computed: {
+    ...mapGetters('auth', [
+      'authenticated',
+      'user'
+    ])
+  },
+  methods: {
+    ...mapActions('auth', [
+      'userIsInvalid'
+    ]),
+    logout () {
+      localStorage.removeItem('token')
+      this.userIsInvalid()
+      this.$router.push({ name: 'Login' })
+    }
+  }
 }
 </script>
