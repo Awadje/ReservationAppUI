@@ -9,7 +9,7 @@ const defaultSettings = {
 }
 
 const UserAPI = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'http://localhost:3000/',
   ...defaultSettings
 })
 

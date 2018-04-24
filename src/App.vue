@@ -14,6 +14,7 @@
           value="true"
           v-for="(item, i) in items"
           :key="i"
+          :to="{ name: item.router }"
         >
           <v-list-tile-action>
             <v-icon v-html="item.icon"></v-icon>
@@ -25,6 +26,8 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar
+      dark
+      color="primary"
       app
       :clipped-left="clipped"
     >
@@ -80,12 +83,18 @@ export default {
       fixed: false,
       items: [{
         icon: 'bubble_chart',
-        title: 'Inspire'
+        title: 'Tafels',
+        router: 'Tables'
+      },
+      {
+        icon: 'bubble_chart',
+        title: 'Home',
+        router: 'HelloWorld'
       }],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Vuetify.js'
+      title: 'Restaurant Argentina'
     }
   },
   computed: {

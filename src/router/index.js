@@ -32,12 +32,14 @@ export default new Router({
     {
       path: '/tables',
       name: 'Tables',
-      component: Tables
+      component: Tables,
+      meta: { requiresAuth: true }
     },
     {
       path: '/reservation',
       name: 'Reservation',
-      component: Reservation
+      component: Reservation,
+      meta: { requiresAuth: true }
     }
   ]
 })
