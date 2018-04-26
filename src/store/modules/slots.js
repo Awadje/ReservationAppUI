@@ -8,7 +8,7 @@ const state = {
 }
 
 const getters = {
-  allSlots: (state, getters) => {
+  availableSlots: (state, getters) => {
     return state.slots
   }
 }
@@ -32,6 +32,7 @@ const actions = {
 }
 
 export default {
+  namespaced: true,
   state,
   getters,
   actions,

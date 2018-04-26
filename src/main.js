@@ -52,7 +52,7 @@ Vue.use(Vuetify, {
     VMenu
   },
   theme: {
-    primary: '#ee44aa',
+    primary: '#f44242',
     secondary: '#424242',
     accent: '#82B1FF',
     error: '#FF5252',
