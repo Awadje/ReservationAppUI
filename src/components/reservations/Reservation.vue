@@ -234,11 +234,6 @@ export default {
         .then((response) => {
           console.log(response)
           this.savedReservation = 'Reservering geslaagd!'
-          // if (!this.doubleReservation) {
-          //   this.$router.push({name: 'Tables'})
-          // } else {
-          //   return this.doubleReservation = `Reservering met met nummer: ${this.phone} en/of e-mail: ${this.email} is al gemaakt vandaag`
-          // }
         })
         .catch((error) => {
           console.log(error)
@@ -250,27 +245,6 @@ export default {
         this.selectedSlots = this.$store.getters.slots.availableSlots
       }
     },
-    // getSlots () {
-    //   if (this.date !== null) {
-    //     this.setSlots()
-    //     this.setmode = true
-    //     if (this.selectedSlots !== null) {
-    //        console.log('selected slot via database: ', this.selectedSlots)
-    //     if (this.e1 === 'PM') {
-    //         for (var t = 0; t < this.selectedSlots.length; ++t) {
-    //           for (var y = 0; y < this.availableAMs.length; ++y) {
-    //             if (this.date === this.selectedSlots[i].slot_date) {
-    //               if (this.availableAMs[y].time === this.selectedSlots[t].slot_time) {
-    //                 this.availableAMs[y].state = 'disabled'
-    //                 this.availableAMs[y].click_state = null
-    //               }
-    //             }
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
   }
 }
 </script>
