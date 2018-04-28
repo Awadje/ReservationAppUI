@@ -14,6 +14,9 @@
             <v-alert v-if="doubleSlot" type="error" v-model="doubleSlot" icon="warning" :value="true" outline dismissible>
               {{doubleSlot}}
             </v-alert>
+            <v-alert v-if="savedReservation" type="success" v-model="savedReservation" icon="check_circle" :value="true" outline dismissible>
+              {{savedReservation}}
+            </v-alert>
           <v-stepper v-model="e6" vertical>
             <v-stepper-step step="1" v-bind:complete="e6 > 1" complete editable>
               Kies de datum van de reservering</v-stepper-step>
@@ -33,7 +36,7 @@
             </v-stepper-content>
             <v-stepper-step step="2" ditable v-bind:complete="e6 > 2">Kies een één van de shifts</v-stepper-step>
             <v-stepper-content step="2">
-              <v-radio-group v-on:change="formatDate">
+              <v-radio-group v-on:change="formatDate" v-model="selected">
                 <v-radio v-for ="slot in availablePMs" :key="slot.id" :label="`${slot.time}`" @click.native="e6 = slot.click_state" :value="`${slot.time}`" :disabled="slot.state"></v-radio>
               </v-radio-group>
             </v-stepper-content>
@@ -116,6 +119,7 @@ export default {
       selectedSlots: [],
       doubleReservation: false,
       doubleSlot: false,
+      savedReservation: false,
       availablePMs: [
         { id: 1, time: '17:00 - 20:00', click_state: 3, state: false },
         { id: 2, time: '20:00 - 22:00', click_state: 3, state: false }
@@ -149,6 +153,7 @@ export default {
   mounted () {
     this.setAvailableDays()
     this.allSlots()
+    console.log(this.doubleReservation)
     console.log(this.availableSlots)
   },
   beforeUpdate () {
@@ -172,8 +177,12 @@ export default {
     submit () {
       this.$validator.validateAll().then((result) => {
         if (result) {
-          this.addReservationToAPI(),
+          this.addReservationToAPI()
+          if (this.doubleReservation === false) {
           this.addSlotToAPI()
+          } else {
+            this.doubleReservation
+          }
           return
         }alert('Correct the errors!')
       })
@@ -182,7 +191,7 @@ export default {
       if (this.e1 === 'PM') {
         this.collapsed = true
         this.ok = null
-        // this.getSlots()
+        this.availableSlots()
         console.log('value', this.e1)
         this.e1 = null
       }
@@ -196,7 +205,6 @@ export default {
       todaydate.setDate(nowdate.getDate() + remainingdays)
       this.availableDays.min = nowdate
       this.availableDays.max = todaydate
-
       this.allowedDates = this.availableDays
     },
     addReservationToAPI () {
@@ -205,15 +213,15 @@ export default {
         email: this.email,
         phone: this.phone,
         reservation: this.appointment,
+        slot: this.selected
       }
       ReservationAPI.post('/reservation/create', newappointment)
         .then((response) => {
           console.log(response)
-          this.$router.push({name: 'Tables'})
         })
         .catch((error) => {
           console.log(error)
-          this.doubleReservation = 'Reservering met op nummer 0646017364 is al gemaakt vandaag'
+          this.doubleReservation = `Reservering met met nummer: ${this.phone} en/of e-mail: ${this.email} is al gemaakt vandaag`
         })
     },
     addSlotToAPI () {
@@ -225,10 +233,16 @@ export default {
       ReservationAPI.post('/slot/create', newslot)
         .then((response) => {
           console.log(response)
+          this.savedReservation = 'Reservering geslaagd!'
+          // if (!this.doubleReservation) {
+          //   this.$router.push({name: 'Tables'})
+          // } else {
+          //   return this.doubleReservation = `Reservering met met nummer: ${this.phone} en/of e-mail: ${this.email} is al gemaakt vandaag`
+          // }
         })
         .catch((error) => {
           console.log(error)
-          this.doubleSlot = 'Kies een ander tijdstup deze is bezet'
+          this.doubleSlot = 'Kies een ander tijdstip deze is bezet'
         })
     },
     setSlots () {
