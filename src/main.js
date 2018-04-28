@@ -4,6 +4,7 @@ import Vue from 'vue'
 import store from './store'
 import App from './App'
 import router from './router'
+import VeeValidate from 'vee-validate'
 import {
   Vuetify,
   VApp,
@@ -18,7 +19,13 @@ import {
   VCard,
   VForm,
   VTextField,
-  VAlert
+  VAlert,
+  VStepper,
+  VDialog,
+  VDatePicker,
+  VSelect,
+  VRadioGroup,
+  VMenu
 } from 'vuetify'
 import '../node_modules/vuetify/src/stylus/app.styl'
 
@@ -36,10 +43,16 @@ Vue.use(Vuetify, {
     VCard,
     VForm,
     VTextField,
-    VAlert
+    VAlert,
+    VStepper,
+    VDialog,
+    VDatePicker,
+    VSelect,
+    VRadioGroup,
+    VMenu
   },
   theme: {
-    primary: '#ee44aa',
+    primary: '#f44242',
     secondary: '#424242',
     accent: '#82B1FF',
     error: '#FF5252',
@@ -50,6 +63,9 @@ Vue.use(Vuetify, {
 })
 
 Vue.config.productionTip = false
+
+/* eslint-disable no-new */
+Vue.use(VeeValidate)
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {

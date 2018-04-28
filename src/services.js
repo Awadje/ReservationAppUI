@@ -13,6 +13,12 @@ const UserAPI = axios.create({
   ...defaultSettings
 })
 
+const ReservationAPI = axios.create({
+  baseURL: 'http://localhost:3001/',
+  ...defaultSettings
+})
+
 export {
-  UserAPI
+  UserAPI,
+  ReservationAPI
 }
