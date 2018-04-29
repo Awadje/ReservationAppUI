@@ -1,6 +1,6 @@
 <template>
  <v-container fluid grid-list-md>
-      <v-btn @click="$router.push({ name: 'HelloWorld'})" fab dark small color="primary">
+    <v-btn @click="$router.push({ name: 'HelloWorld'})" fab dark small color="primary">
       <v-icon dark>keyboard_arrow_left</v-icon>
     </v-btn>
       <v-layout row wrap>
@@ -44,6 +44,9 @@
           </v-card>
         </v-flex>
       </v-layout>
+        <v-btn @click="$router.push({ name: 'TableForm'})" fab dark small color="primary">
+          <v-icon dark>add</v-icon>
+        </v-btn>
     </v-container>
 </template>
 
