@@ -37,15 +37,15 @@ export default new Router({
       meta: { requiresAuth: true }
     },
     {
-      path: '/reservation',
-      name: 'Reservation',
-      component: Reservation,
-      meta: { requiresAuth: true }
-    },
-    {
       path: '/tableform',
       name: 'TableForm',
       component: TableForm,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/reservation',
+      name: 'Reservation',
+      component: Reservation,
       meta: { requiresAuth: true }
     }
   ]

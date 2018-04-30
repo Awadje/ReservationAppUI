@@ -25,7 +25,8 @@ import {
   VDatePicker,
   VSelect,
   VRadioGroup,
-  VMenu
+  VMenu,
+  VCheckbox
 } from 'vuetify'
 import '../node_modules/vuetify/src/stylus/app.styl'
 
@@ -49,7 +50,8 @@ Vue.use(Vuetify, {
     VDatePicker,
     VSelect,
     VRadioGroup,
-    VMenu
+    VMenu,
+    VCheckbox
   },
   theme: {
     primary: '#f44242',
