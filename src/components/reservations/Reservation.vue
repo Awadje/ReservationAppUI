@@ -17,6 +17,9 @@
             <v-alert v-if="savedReservation" type="success" v-model="savedReservation" icon="check_circle" :value="true" outline dismissible>
               {{savedReservation}}
             </v-alert>
+            <v-alert v-if="formNotValid" type="error" v-model="formNotValid" icon="warning" :value="true" outline dismissible>
+              {{formNotValid}}
+            </v-alert>
           <v-stepper v-model="e6" vertical>
             <v-stepper-step step="1" v-bind:complete="e6 > 1" complete editable>
               Kies de datum van de reservering</v-stepper-step>
@@ -34,10 +37,10 @@
                 </v-dialog>
               </v-flex>
             </v-stepper-content>
-            <v-stepper-step step="2" ditable v-bind:complete="e6 > 2">Kies een één van de shifts</v-stepper-step>
+            <v-stepper-step step="2" ditable v-bind:complete="e6 > 2">Hoe laat kommen de gasten ?</v-stepper-step>
             <v-stepper-content step="2">
               <v-radio-group v-on:change="formatDate" v-model="selected">
-                <v-radio v-for ="slot in availablePMs" :key="slot.id" :label="`${slot.time}`" @click.native="e6 = slot.click_state" :value="`${slot.time}`" :disabled="slot.state"></v-radio>
+                <v-radio v-for ="slot in tableSlots" :key="slot.id" :label="`${slot.time}`" @click.native="e6 = slot.click_state" :value="`${slot.id}`" :disabled="slot.state"></v-radio>
               </v-radio-group>
             </v-stepper-content>
             <v-stepper-step step="3" editable v-bind:complete="e6 > 3">Vul contact gegevens van de klant in</v-stepper-step>
@@ -57,33 +60,6 @@
                 <v-spacer></v-spacer>
               <v-btn block color="primary" @click ="submit ()" @click.native="e6 = 0">RESERVEREN</v-btn>
             </form>
-            <v-dialog v-model = "dialog" persistent max-width ="750">
-              <v-card>
-                <div v-for="user in userArray" v-bind:key="user.name">
-                <v-spacer></v-spacer>
-                <v-flex xs12 sm6 md4>
-                    <v-spacer></v-spacer>
-                  <span>Name: {{user.name}}</span>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                    <v-spacer></v-spacer>
-                  <span>Email: {{user.email}}</span>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                    <v-spacer></v-spacer>
-                  <span>Phone: {{user.phone}}</span>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                    <v-spacer></v-spacer>
-                  <span>Appointment: {{user.appointment}}</span>
-                </v-flex>
-              </div>
-                <v-card-actions>
-                   <v-spacer></v-spacer>
-                   <v-btn color="blue darken-1" flat @click.native="dialog = false">Confirm</v-btn>
-                 </v-card-actions>
-            </v-card>
-          </v-dialog>
             </v-stepper-content>
           </v-stepper>
         </v-card>
@@ -120,11 +96,26 @@ export default {
       doubleReservation: false,
       doubleSlot: false,
       savedReservation: false,
-      availablePMs: [
-        { id: 1, time: '17:00 - 20:00', click_state: 3, state: false },
-        { id: 2, time: '20:00 - 22:00', click_state: 3, state: false }
+      formNotValid: false,
+      tableSlots: [
+        { id: 1, time: '17:00', click_state: 3, state: false },
+        { id: 2, time: '17:15', click_state: 3, state: false },
+        { id: 3, time: '17:30', click_state: 3, state: false },
+        { id: 4, time: '17:45', click_state: 3, state: false },
+        { id: 6, time: '18:00', click_state: 3, state: false },
+        { id: 7, time: '18:15', click_state: 3, state: false },
+        { id: 8, time: '18:30', click_state: 3, state: false },
+        { id: 9, time: '18:45', click_state: 3, state: false },
+        { id: 10, time: '19:00', click_state: 3, state: false },
+        { id: 11, time: '19:15', click_state: 3, state: false },
+        { id: 12, time: '19:30', click_state: 3, state: false },
+        { id: 13, time: '19:45', click_state: 3, state: false },
+        { id: 14, time: '20:00', click_state: 3, state: false },
+        { id: 15, time: '20:15', click_state: 3, state: false },
+        { id: 16, time: '20:30', click_state: 3, state: false },
+        { id: 17, time: '20:45', click_state: 3, state: false },
+        { id: 18, time: '21:00', click_state: 3, state: false },
       ],
-      userArray: {},
       selected: null,
       ok: null,
       collapsed: null,
@@ -172,19 +163,19 @@ export default {
       const daynumber = moment(this.date, 'YYYY/MM/DD').format('Do')
       const month = moment(this.date, 'YYYY/MM/DD').format('MMMM')
       const year = moment(this.date, 'YYYY/MM/DD').format('YYYY')
-      this.appointment = day + '    ' + daynumber + '    ' + month + '    ' + year + '   ' + 'between' + '   ' + this.selected
+      this.appointment = day + '    ' + daynumber + '    ' + month + '    ' + year + '   ' + 'between slots' + '   ' + this.selected & +this.selected + +8
     },
     submit () {
       this.$validator.validateAll().then((result) => {
         if (result) {
-          this.addReservationToAPI()
-          if (this.doubleReservation === false) {
           this.addSlotToAPI()
+          if (this.doubleSlots === false) {
+          this.addReservationToAPI()
           } else {
             this.doubleReservation
           }
           return
-        }alert('Correct the errors!')
+        } this.formNotValid = ('Het formulier is niet compleet')
       })
     },
     setTimeFormat () {
@@ -226,7 +217,8 @@ export default {
     },
     addSlotToAPI () {
       let newslot = {
-        slot_time: this.selected,
+        slot_start: this.selected,
+        slot_end: +this.selected + +8,
         slot_date: this.date,
         created_at: moment()
       }
