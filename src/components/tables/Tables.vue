@@ -5,9 +5,10 @@
     </v-btn>
       <v-layout row wrap>
         <v-flex
+          v-for="table in tables.data"
           v-bind="{ [`xs${table.flex}`]: true }"
-          v-for="table in tables"
           :key="table.name"
+          :v-model="table"
         >
           <v-card>
             <v-card-media
@@ -50,43 +51,45 @@
 </template>
 
 <script>
-import { TableAPI } from '@/services'
+// import { TableAPI } from '@/services'
+import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
   name: 'App',
   data () {
     return {
-      tables: []
-      // tables: [
-      //   {
-      //     tableNumber: 7,
-      //     size: 5,
-      //     location: 'In de hoek',
-      //     notes: 'Dichtbij live muziek',
-      //     flex: 6,
-      //     imgUrl: '/static/img/restaurant-table.png',
-      //     availableSlots: [
-      //       { id: 1, time: '5:00pm - 6:00 pm', click_state: 3, state: false },
-      //       { id: 2, time: '6:00pm - 7:00 pm', click_state: 3, state: false },
-      //       { id: 3, time: '7:00am - 8:00 pm', click_state: 3, state: false },
-      //       { id: 4, time: '8:00pm - 9:00 pm', click_state: 3, state: false }
-      //     ]}
-      // ]
+
     }
   },
   mounted () {
-    this.getTableList()
+    console.log(this.tables.data)
+  },
+  computed: {
+    ...mapState('tables', [
+      'list'
+    ]),
+    ...mapGetters('tables', {
+      findTablesInStore: 'find'
+    }),
+    tables () {
+      return this.findTablesInStore({query: { $sort: {createdAt: 1} }})
+    },
+    allTables () {
+      return this.$store.getters.tables
+    }
   },
   methods: {
-    getTableList () {
-      TableAPI.get(`table/list`)
-        .then(response => {
-          this.tables = response.data
-        })
-        .catch(e => {
-          this.errors.push(e)
-        })
-    }
+    ...mapActions('tables', {
+      findTables: 'find'
+    })
+  },
+  created () {
+    this.findTables({
+      query: {
+        $sort: {createdAt: -1},
+        $limit: 25
+      }
+    })
   }
 }
 </script> 

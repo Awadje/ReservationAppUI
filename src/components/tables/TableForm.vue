@@ -27,61 +27,56 @@
         v-model="size"
         required
       ></v-text-field>
-      <v-btn @click="addTableToAPI" color="green" dark :disabled="!valid">Opslaan</v-btn>
+      <v-btn @click="addTable" color="green" dark :disabled="!valid">Opslaan</v-btn>
       <v-btn color="primary" dark to="/tables">Terug</v-btn>
     </v-form>
   </v-container>
 </template>
 
 <script>
-  import { TableAPI } from '@/services'
+import { mapActions } from 'vuex'
 
-  export default {
-    data: () => ({
-      valid: true,
-      name: '',
-      location: '',
-      size: '',
-      locations: [
-        'Bij het raam',
-        'In het midden',
-        'Achter in het restaurant',
-        'In een hoek'
-      ],
-      properties: [
-        'Ronde Tafel',
-        'Dichtbij de muziek',
-        'Romantisch voor twee'
-      ],
-      checkbox: true,
-      radioGroup: 1
-    }),
-    computed: {
-    },
-    methods: {
-      addTableToAPI () {
-        let newtable = {
-          name: this.name,
-          location: this.location,
-          properties: this.property,
-          size: this.size,
-          flex: 6,
-          available: true
-        }
-        TableAPI.post('/table/create', newtable)
-          .then((response) => {
-            console.log(response)
-            this.clear()
-            this.$router.push({name: '', params: { }})
-          })
-          .catch((error) => {
-            console.log(error)
-            this.doubleReservation = `Reservering met met nummer: ${this.phone} en/of e-mail: ${this.email} is al gemaakt vandaag`
-          })
-      },
-      clear () {
-        this.$refs.form.reset()
+export default {
+  data: () => ({
+    valid: true,
+    name: '',
+    location: '',
+    size: '',
+    locations: [
+      'Bij het raam',
+      'In het midden',
+      'Achter in het restaurant',
+      'In een hoek'
+    ],
+    properties: [
+      'Ronde Tafel',
+      'Dichtbij de muziek',
+      'Romantisch voor twee'
+    ],
+    checkbox: true,
+    radioGroup: 1
+  }),
+  computed: {
+  },
+  methods: {
+    submit () {
+      let newtable = {
+        name: this.name,
+        location: this.location,
+        properties: this.property,
+        size: this.size,
+        flex: 6,
+        available: true
       }
-    }
+
+      this.addTable.create({ newtable })
+    },
+    clear () {
+      this.$refs.form.reset()
+    },
+    ...mapActions('tables', {
+      addTable: 'create'
+    })
   }
+}
 </script>

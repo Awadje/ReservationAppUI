@@ -169,7 +169,7 @@ export default {
       this.$validator.validateAll().then((result) => {
         if (result) {
           this.addSlotToAPI()
-          if (this.doubleSlots === false) {
+          if (this.doubleSlot === false) {
           this.addReservationToAPI()
           } else {
             this.doubleReservation
