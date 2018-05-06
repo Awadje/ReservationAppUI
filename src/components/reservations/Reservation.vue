@@ -217,6 +217,7 @@ export default {
     },
     addSlotToAPI () {
       let newslot = {
+        table_id : this.$route.params._id,
         slot_start: this.selected,
         slot_end: +this.selected + +8,
         slot_date: this.date,

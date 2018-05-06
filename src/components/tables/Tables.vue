@@ -5,9 +5,9 @@
     </v-btn>
       <v-layout row wrap>
         <v-flex
-          v-bind="{ [`xs${table.flex}`]: true }"
-          v-for="table in tables"
+          v-for="(table, i) in tables"
           :key="table.name"
+          v-bind="{ [`xs${table.flex}`]: true }"
         >
           <v-card>
             <v-card-media
@@ -17,6 +17,7 @@
                 <v-layout fill-height>
                   <v-flex xs12 align-end flexbox>
                     <span class="headline" v-text="table.name"/>
+                    <v-icon medium v-if="!table.active">lock_outline</v-icon>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -30,14 +31,20 @@
             </v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn icon @click="$router.push({ name: 'Reservation'})">
+              <v-btn icon @click="$router.push({ name: 'Reservation', params: { _id: table._id }})">
                 <v-icon>event_note</v-icon>
               </v-btn>
-              <v-btn icon>
-                <v-icon>bookmark</v-icon>
+              <v-btn icon @click="$router.push({ name: 'EditTableForm', params: { _id: table._id }})">
+                <v-icon>mode_edit</v-icon>
               </v-btn>
-              <v-btn icon>
-                <v-icon>share</v-icon>
+              <v-btn icon v-show="table.active === true" @click="deactivateTable (table)">
+                <v-icon v-show="table.active === true">lock_outline</v-icon>
+              </v-btn>
+              <v-btn icon v-show="!table.active" @click="reactivateTable (table)">
+                  <v-icon v-show="!table.active">lock_open</v-icon>
+              </v-btn>
+                <v-btn icon @click="deleteTable (table, i)">
+                <v-icon color="primary">delete</v-icon>
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -57,21 +64,6 @@ export default {
   data () {
     return {
       tables: []
-      // tables: [
-      //   {
-      //     tableNumber: 7,
-      //     size: 5,
-      //     location: 'In de hoek',
-      //     notes: 'Dichtbij live muziek',
-      //     flex: 6,
-      //     imgUrl: '/static/img/restaurant-table.png',
-      //     availableSlots: [
-      //       { id: 1, time: '5:00pm - 6:00 pm', click_state: 3, state: false },
-      //       { id: 2, time: '6:00pm - 7:00 pm', click_state: 3, state: false },
-      //       { id: 3, time: '7:00am - 8:00 pm', click_state: 3, state: false },
-      //       { id: 4, time: '8:00pm - 9:00 pm', click_state: 3, state: false }
-      //     ]}
-      // ]
     }
   },
   mounted () {
@@ -86,6 +78,30 @@ export default {
         .catch(e => {
           this.errors.push(e)
         })
+    },
+    deactivateTable (table) {
+      TableAPI.put(`/table/deactivate/${table._id}`, {active: false}).then(result => {
+        if (result.status === 200) {
+          console.log('Table deactivated')
+          table.active = false
+        }
+      })
+    },
+    reactivateTable (table) {
+      TableAPI.put(`/table/activate/${table._id}`, {active: true}).then(result => {
+        if (result.status === 200) {
+          console.log('Table reactivated')
+          table.active = true
+        }
+      })
+    },
+    deleteTable (table, index) {
+      TableAPI.delete(`/table/${table._id}`).then(result => {
+        if (result.status === 200) {
+          console.log('deleted')
+          this.tables.splice(index)
+        }
+      })
     }
   }
 }
