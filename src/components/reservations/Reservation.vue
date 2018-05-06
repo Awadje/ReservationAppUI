@@ -21,7 +21,7 @@
               {{formNotValid}}
             </v-alert>
           <v-stepper v-model="e6" vertical>
-            <v-stepper-step step="1" v-bind:complete="e6 > 1" complete editable>
+            <v-stepper-step step="1" v-bind:complete="e6 > 1" editable>
               Kies de datum van de reservering</v-stepper-step>
             <v-stepper-content step="1">
               <v-flex xs11 sm5>

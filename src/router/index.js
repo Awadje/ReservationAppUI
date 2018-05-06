@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import Tables from '@/components/tables/Tables'
+import TableForm from '@/components/tables/TableForm'
 import Reservation from '@/components/reservations/Reservation'
 import Login from '@/components/Login'
 import AuthBase from '@/components/AuthBase'
@@ -33,6 +34,12 @@ export default new Router({
       path: '/tables',
       name: 'Tables',
       component: Tables,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/tableform',
+      name: 'TableForm',
+      component: TableForm,
       meta: { requiresAuth: true }
     },
     {
