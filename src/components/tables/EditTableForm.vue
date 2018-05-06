@@ -1,15 +1,16 @@
 <template>
   <v-container>
-    <v-form v-model="valid" ref="form" lazy-validation>
+    <v-form v-model="valid" ref="form" lazy-validation
+    v-for="table in tableToEdit" v-bind:key="table.name">
       <v-text-field
         label="Naam"
-        v-model="name"
+        v-model="table.name"
           :rules="[v => !!v || 'Naam is verplicht']"
         required
       ></v-text-field>
         <v-select
         label="Locatie"
-        v-model="location"
+        v-model="table.location"
         :items="locations"
         :rules="[v => !!v || 'Locatie is verplicht']"
         required
@@ -24,10 +25,10 @@
       </v-radio-group>
          <v-text-field
         label="Grootte"
-        v-model="size"
+        v-model="table.size"
         required
       ></v-text-field>
-      <v-btn @click="addTableToAPI" color="green" dark :disabled="!valid">Opslaan</v-btn>
+       <v-btn color="green" dark @click="editTable(table)" :disabled="!valid">Aanpassen</v-btn>
       <v-btn color="primary" dark to="/tables">Terug</v-btn>
     </v-form>
   </v-container>
@@ -54,31 +55,32 @@
         'Romantisch voor twee'
       ],
       checkbox: true,
-      radioGroup: 1
+      radioGroup: 1,
+      tableToEdit: []
     }),
     computed: {
     },
+    mounted () {
+      this.getTableById()
+    },
     methods: {
-      addTableToAPI () {
-        let newtable = {
-          name: this.name,
-          location: this.location,
-          properties: this.property,
-          size: this.size,
-          flex: 6,
-          available: true,
-          active: true
-        }
-        TableAPI.post('/table/create', newtable)
-          .then((response) => {
+      getTableById () {
+        TableAPI.get(`table/edit/${this.$route.params._id}`)
+          .then(response => {
             console.log(response)
-            this.clear()
-            this.$router.push({name: '', params: { }})
+            this.tableToEdit = response.data
           })
-          .catch((error) => {
-            console.log(error)
-            this.doubleReservation = `Reservering met met nummer: ${this.phone} en/of e-mail: ${this.email} is al gemaakt vandaag`
+          .catch(e => {
+            this.errors.push(e)
           })
+      },
+      editTable (table) {
+        TableAPI.put(`/tables/edit/`, table).then(result => {
+          if (result.status === 200) {
+            this.$router.push({name: 'Tables', params: { _id: table._id }})
+            console.log('Table Updated')
+          }
+        })
       },
       clear () {
         this.$refs.form.reset()

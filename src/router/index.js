@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import Tables from '@/components/tables/Tables'
 import TableForm from '@/components/tables/TableForm'
+import EditTableForm from '@/components/tables/EditTableForm'
 import Reservation from '@/components/reservations/Reservation'
 import Login from '@/components/Login'
 import AuthBase from '@/components/AuthBase'
@@ -43,7 +44,12 @@ export default new Router({
       meta: { requiresAuth: true }
     },
     {
-      path: '/reservation',
+      path: '/table/edit/:_id',
+      name: 'EditTableForm',
+      component: EditTableForm
+    },
+    {
+      path: '/reservation/table/:_id',
       name: 'Reservation',
       component: Reservation,
       meta: { requiresAuth: true }
