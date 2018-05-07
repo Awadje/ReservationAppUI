@@ -7,7 +7,7 @@
         <v-flex
           v-for="table in tables.data"
           v-bind="{ [`xs${table.flex}`]: true }"
-          :key="table.name"
+          :key="table._id"
           :v-model="table"
         >
           <v-card>
@@ -53,12 +53,10 @@
 <script>
 // import { TableAPI } from '@/services'
 import { mapGetters, mapActions, mapState } from 'vuex'
-
 export default {
   name: 'App',
   data () {
     return {
-
     }
   },
   mounted () {
@@ -73,9 +71,6 @@ export default {
     }),
     tables () {
       return this.findTablesInStore({query: { $sort: {createdAt: 1} }})
-    },
-    allTables () {
-      return this.$store.getters.tables
     }
   },
   methods: {
@@ -92,4 +87,4 @@ export default {
     })
   }
 }
-</script> 
+</script>

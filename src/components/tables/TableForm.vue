@@ -1,3 +1,4 @@
+
 <template>
   <v-container>
     <v-form v-model="valid" ref="form" lazy-validation>
@@ -27,7 +28,7 @@
         v-model="size"
         required
       ></v-text-field>
-      <v-btn @click="addTable" color="green" dark :disabled="!valid">Opslaan</v-btn>
+      <v-btn @click="submit()" color="green" dark :disabled="!valid">Opslaan</v-btn>
       <v-btn color="primary" dark to="/tables">Terug</v-btn>
     </v-form>
   </v-container>
@@ -35,7 +36,6 @@
 
 <script>
 import { mapActions } from 'vuex'
-
 export default {
   data: () => ({
     valid: true,
@@ -68,8 +68,7 @@ export default {
         flex: 6,
         available: true
       }
-
-      this.addTable.create({ newtable })
+      this.addTable(newtable)
     },
     clear () {
       this.$refs.form.reset()
