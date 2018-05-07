@@ -34,11 +34,11 @@
               <v-btn icon @click="$router.push({ name: 'Reservation'})">
                 <v-icon>event_note</v-icon>
               </v-btn>
-              <v-btn icon>
-                <v-icon>bookmark</v-icon>
+               <v-btn icon @click="$router.push({ name: 'EditTableForm', params: { _id: table._id }})">
+                <v-icon>mode_edit</v-icon>
               </v-btn>
-              <v-btn icon>
-                <v-icon>share</v-icon>
+                <v-btn icon @click="deleteTable(table._id)">
+                <v-icon color="primary">delete</v-icon>
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -59,9 +59,6 @@ export default {
     return {
     }
   },
-  mounted () {
-    console.log(this.tables.data)
-  },
   computed: {
     ...mapState('tables', [
       'list'
@@ -75,8 +72,12 @@ export default {
   },
   methods: {
     ...mapActions('tables', {
-      findTables: 'find'
-    })
+      findTables: 'find',
+      removeTable: 'remove'
+    }),
+    deleteTable (id) {
+      this.removeTable(id)
+    }
   },
   created () {
     this.findTables({
