@@ -94,7 +94,7 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Restaurant Argentina'
+      title: 'Restaurant App'
     }
   },
   computed: {

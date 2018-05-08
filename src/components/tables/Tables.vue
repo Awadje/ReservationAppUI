@@ -5,7 +5,7 @@
     </v-btn>
       <v-layout row wrap>
         <v-flex
-          v-for="table in tables.data"
+          v-for="table in tables"
           v-bind="{ [`xs${table.flex}`]: true }"
           :key="table._id"
           :v-model="table"
@@ -67,7 +67,7 @@ export default {
       findTablesInStore: 'find'
     }),
     tables () {
-      return this.findTablesInStore({query: { $sort: {createdAt: 1} }})
+      return this.findTablesInStore({query: { $sort: {createdAt: 1} }}).data
     }
   },
   methods: {
