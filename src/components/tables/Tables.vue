@@ -18,6 +18,7 @@
                 <v-layout fill-height>
                   <v-flex xs12 align-end flexbox>
                     <span class="headline" v-text="table.name"/>
+                     <v-icon medium v-if="!table.active">lock_outline</v-icon>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -37,8 +38,14 @@
                <v-btn icon @click="$router.push({ name: 'EditTableForm', params: { _id: table._id }})">
                 <v-icon>mode_edit</v-icon>
               </v-btn>
-                <v-btn icon @click="deleteTable(table._id)">
+              <v-btn icon @click="deleteTable(table._id)">
                 <v-icon color="primary">delete</v-icon>
+              </v-btn>
+              <v-btn icon v-show="table.active === true" @click="deActivateTable (table)">
+                <v-icon v-show="table.active === true">lock_outline</v-icon>
+              </v-btn>
+              <v-btn icon v-show="table.active === false" @click="reActivateTable (table)">
+                  <v-icon v-show="table.active === false">lock_open</v-icon>
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -67,16 +74,24 @@ export default {
       findTablesInStore: 'find'
     }),
     tables () {
-      return this.findTablesInStore({query: { $sort: {createdAt: 1} }}).data
+      return this.findTablesInStore({
+        query: { $sort: {createdAt: 1} }}).data
     }
   },
   methods: {
     ...mapActions('tables', {
       findTables: 'find',
-      removeTable: 'remove'
+      removeTable: 'remove',
+      editSelectedTable: 'patch'
     }),
     deleteTable (id) {
       this.removeTable(id)
+    },
+    deActivateTable (table) {
+      this.editSelectedTable([table._id, { active: false }])
+    },
+    reActivateTable (table) {
+      this.editSelectedTable([table._id, { active: true }])
     }
   },
   created () {

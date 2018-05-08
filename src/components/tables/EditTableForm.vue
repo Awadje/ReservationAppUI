@@ -9,26 +9,10 @@
         :rules="[v => !!v || 'Naam is verplicht']"
         required
       ></v-text-field>
-        <v-select
-        label="Locatie"
-        v-model="table.location"
-        @change="clickSave(table)"
-        :items="locations"
-        :rules="[v => !!v || 'Locatie is verplicht']"
-        required
-      ></v-select>
-        <v-select
-        label="Eigenschappen"
-        v-model="table.property"
-        @change="clickSave(table)"
-        :items="properties"
-        :rules="[v => !!v || 'Locatie is verplicht']"
-        required
-      ></v-select>
          <v-text-field
         label="Grootte"
         v-model="table.size"
-        @keyup="clickSave(table)"
+        @keyup="typeSave(table)"
         required
       ></v-text-field>
       <v-btn color="primary" dark to="/tables">Terug</v-btn>
@@ -82,10 +66,6 @@
      }),
      typeSave (event) {
        console.log('key pressed')
-       this.editSelectedTable([this.$store.getters['tables/list'][0]._id, this.$store.getters['tables/list'][0]])
-     },
-     clickSave (event) {
-       console.log('item clicked')
        this.editSelectedTable([this.$store.getters['tables/list'][0]._id, this.$store.getters['tables/list'][0]])
      },
      getTable () {

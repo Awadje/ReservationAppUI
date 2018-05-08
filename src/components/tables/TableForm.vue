@@ -66,7 +66,8 @@ export default {
         properties: this.property,
         size: this.size,
         flex: 6,
-        available: true
+        available: true,
+        active: true
       }
       this.addTable(newtable)
     },
