@@ -4,31 +4,33 @@
     v-for="table in tables" v-bind:key="table._id">
       <v-text-field
         label="Naam"
-        :values="table.name"
+        v-model="table.name"
+        @keyup="typeSave(table)"
         :rules="[v => !!v || 'Naam is verplicht']"
         required
       ></v-text-field>
         <v-select
         label="Locatie"
-        :value="table.location"
+        v-model="table.location"
+        @change="clickSave(table)"
         :items="locations"
         :rules="[v => !!v || 'Locatie is verplicht']"
         required
       ></v-select>
-      <v-radio-group v-model="radioGroup">
-      <v-radio
-        v-for="property in properties"
-        :key="property"
-        :label="property"
-        :value="property"
-      ></v-radio>
-      </v-radio-group>
+        <v-select
+        label="Eigenschappen"
+        v-model="table.property"
+        @change="clickSave(table)"
+        :items="properties"
+        :rules="[v => !!v || 'Locatie is verplicht']"
+        required
+      ></v-select>
          <v-text-field
         label="Grootte"
-        :value="table.size"
+        v-model="table.size"
+        @keyup="clickSave(table)"
         required
       ></v-text-field>
-       <v-btn color="green" dark @click="editTable(table)" :disabled="!valid">Aanpassen</v-btn>
       <v-btn color="primary" dark to="/tables">Terug</v-btn>
     </v-form>
   </v-container>
@@ -39,8 +41,8 @@
 
  export default {
    data: () => ({
+     editName: '',
      valid: true,
-     location: '',
      size: '',
      locations: [
        'Bij het raam',
@@ -53,9 +55,7 @@
        'Dichtbij de muziek',
        'Romantisch voor twee'
      ],
-     checkbox: true,
-     radioGroup: 1,
-     valuesToEdit: []
+     valuesToEdit: {}
    }),
    computed: {
      ...mapState('tables', [
@@ -80,21 +80,21 @@
        getTableById: 'get',
        editSelectedTable: 'patch'
      }),
+     typeSave (event) {
+       console.log('key pressed')
+       this.editSelectedTable([this.$store.getters['tables/list'][0]._id, this.$store.getters['tables/list'][0]])
+     },
+     clickSave (event) {
+       console.log('item clicked')
+       this.editSelectedTable([this.$store.getters['tables/list'][0]._id, this.$store.getters['tables/list'][0]])
+     },
      getTable () {
        this.getTableById(this.$route.params._id)
        console.log(this.$route.params._id)
      },
      editTable (table) {
-       let editTable = {
-         name: table.name,
-         location: this.location,
-         properties: this.property,
-         size: this.size,
-         flex: 6,
-         available: true
-       }
-       console.log(editTable)
-       this.editSelectedTable(table)
+       console.log(table)
+       this.editSelectedTable([table._id, table])
        console.log('Table Updated')
      }
    },
