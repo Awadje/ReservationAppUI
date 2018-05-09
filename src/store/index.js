@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import auth from './modules/auth'
-import slots from './modules/slots'
+// import slots from './modules/slots'
 // import tables from './modules/tables'
 // import vueFeathers from 'vue-feathers'
 import feathersVuex from 'feathers-vuex'
@@ -16,11 +16,11 @@ const debug = process.env.NODE_ENV !== 'production'
 
 export default new Vuex.Store({
   plugins: [
-    service('tables')
+    service('tables'),
+    service('slots')
   ],
   modules: {
-    auth,
-    slots
+    auth
     // tables
   },
   strict: debug

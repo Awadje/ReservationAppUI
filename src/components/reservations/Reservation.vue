@@ -135,17 +135,29 @@ export default {
   },
   computed: {
     ...mapState('slots', [
-      'slots'
+      'list'
     ]),
-    ...mapGetters('slots', [
-      'availableSlots'
-    ])
+    ...mapGetters('slots', {
+      findSlotsInStore: 'find'
+    }),
+    slots () {
+      return this.SlotsInStore({
+        query: { $sort: {createdAt: 1} }}).data
+    }
+  },
+  created () {
+    this.findSlots({
+      query: {
+        $sort: {createdAt: -1},
+        $limit: 25
+      }
+    })
   },
   mounted () {
     this.setAvailableDays()
     this.allSlots()
     console.log(this.doubleReservation)
-    console.log(this.availableSlots)
+    console.log(this.slots)
   },
   beforeUpdate () {
     this.setTimeFormat()
@@ -153,9 +165,10 @@ export default {
   updated () {
   },
   methods: {
-    ...mapActions('slots', [
-      'allSlots'
-    ]),
+    ...mapActions('slots', {
+      findSlots: 'find',
+      addSlot: 'create'
+    }),
     formatDate () {
       console.log('date for appointment:', moment(this.date, 'YYYY/MM/DD').format('DD/MM/YYYY'))
       console.log('Time for appointment:', this.selected)
@@ -182,7 +195,7 @@ export default {
       if (this.e1 === 'PM') {
         this.collapsed = true
         this.ok = null
-        this.availableSlots()
+        this.slots
         console.log('value', this.e1)
         this.e1 = null
       }
@@ -216,25 +229,17 @@ export default {
         })
     },
     addSlotToAPI () {
-      let newslot = {
+      let newSlot = {
         slot_start: this.selected,
         slot_end: +this.selected + +8,
         slot_date: this.date,
-        created_at: moment()
+        createdAt: moment()
       }
-      ReservationAPI.post('/slot/create', newslot)
-        .then((response) => {
-          console.log(response)
-          this.savedReservation = 'Reservering geslaagd!'
-        })
-        .catch((error) => {
-          console.log(error)
-          this.doubleSlot = 'Kies een ander tijdstip deze is bezet'
-        })
+      this.addSlot(newSlot)
     },
     setSlots () {
-      if (this.$store.getters.slots.availableSlots > 0) {
-        this.selectedSlots = this.$store.getters.slots.availableSlots
+      if (this.slots > 0) {
+        this.selectedSlots = this.slots
       }
     },
   }

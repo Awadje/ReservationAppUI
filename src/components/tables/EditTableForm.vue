@@ -56,7 +56,7 @@
        }).data
      }
    },
-   mounted () {
+   mount () {
      this.getTable()
    },
    methods: {

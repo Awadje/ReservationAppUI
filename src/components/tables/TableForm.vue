@@ -70,6 +70,7 @@ export default {
         active: true
       }
       this.addTable(newtable)
+      this.clear()
     },
     clear () {
       this.$refs.form.reset()
