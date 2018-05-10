@@ -76,7 +76,7 @@
 <script>
 /* eslint-disable*/
 import moment from 'moment'
-import { ReservationAPI } from '../../services'
+import { ReservationAPI, TableAPI } from '../../services'
 import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -223,7 +223,7 @@ export default {
         slot_date: this.date,
         created_at: moment()
       }
-      ReservationAPI.post('/slot/create', newslot)
+      TableAPI.post('/slot/create', newslot)
         .then((response) => {
           console.log(response)
           this.savedReservation = 'Reservering geslaagd!'
