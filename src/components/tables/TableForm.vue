@@ -67,7 +67,8 @@
           size: this.size,
           flex: 6,
           available: true,
-          active: true
+          active: true,
+          slots: {}
         }
         TableAPI.post('/table/create', newtable)
           .then((response) => {
