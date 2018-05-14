@@ -1,4 +1,4 @@
-import { ReservationAPI } from '../../services'
+import { TableAPI } from '../../services'
 
 const ALL_SLOTS = 'ALL_SLOTS'
 const ALL_SLOTS_SUCCESS = 'ALL_SLOTS_SUCCESS'
@@ -24,7 +24,7 @@ const mutations = {
 const actions = {
   allSlots ({commit}) {
     commit(ALL_SLOTS)
-    ReservationAPI.get(`/reservation/slots`).then(response => {
+    TableAPI.get(`/reservation/slots`).then(response => {
       console.log('response via store: ', response.data)
       commit(ALL_SLOTS_SUCCESS, response.data)
     })

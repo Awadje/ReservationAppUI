@@ -76,7 +76,7 @@
 <script>
 /* eslint-disable*/
 import moment from 'moment'
-import { ReservationAPI } from '../../services'
+import { ReservationAPI, TableAPI } from '../../services'
 import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -169,7 +169,7 @@ export default {
       this.$validator.validateAll().then((result) => {
         if (result) {
           this.addSlotToAPI()
-          if (this.doubleSlot === false) {
+            if (this.doubleSlot === false) {
           this.addReservationToAPI()
           } else {
             this.doubleReservation
@@ -204,7 +204,8 @@ export default {
         email: this.email,
         phone: this.phone,
         reservation: this.appointment,
-        slot: this.selected
+        slot: this.selected,
+        table_id : this.$route.params._id,
       }
       ReservationAPI.post('/reservation/create', newappointment)
         .then((response) => {
@@ -216,15 +217,18 @@ export default {
         })
     },
     addSlotToAPI () {
-      let newslot = {
-        table_id : this.$route.params._id,
-        slot_start: this.selected,
-        slot_end: +this.selected + +8,
-        slot_date: this.date,
-        created_at: moment()
+      let newslot =   {
+       slots : [
+  			  {
+		   		    table_id : this.$route.params._id,
+  		        slot_start: this.selected,
+  		        slot_end: +this.selected + +8,
+  		        slot_date: this.date,
+              phone: this.phone
+  			    }
+      	]
       }
-      ReservationAPI.post('/slot/create', newslot)
-        .then((response) => {
+      TableAPI.put('/slot/create', newslot).then((response) => {
           console.log(response)
           this.savedReservation = 'Reservering geslaagd!'
         })
