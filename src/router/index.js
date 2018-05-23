@@ -5,6 +5,7 @@ import Tables from '@/components/tables/Tables'
 import TableForm from '@/components/tables/TableForm'
 import EditTableForm from '@/components/tables/EditTableForm'
 import Reservation from '@/components/reservations/Reservation'
+import ReservationOverview from '@/components/reservations/ReservationOverview'
 import Login from '@/components/Login'
 import AuthBase from '@/components/AuthBase'
 
@@ -52,6 +53,12 @@ export default new Router({
       path: '/reservation/table/:_id',
       name: 'Reservation',
       component: Reservation,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/reservations',
+      name: 'ReservationOverview',
+      component: ReservationOverview,
       meta: { requiresAuth: true }
     }
   ]

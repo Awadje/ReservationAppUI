@@ -90,6 +90,11 @@ export default {
         icon: 'bubble_chart',
         title: 'Home',
         router: 'HelloWorld'
+      },
+      {
+        icon: 'bubble_chart',
+        title: 'Reservations',
+        router: 'ReservationOverview'
       }],
       miniVariant: false,
       right: true,
